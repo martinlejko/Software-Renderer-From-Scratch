@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include <iostream>
 
+
 void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAImage& image) {
     int x = p1.x;
     int y = p1.y;

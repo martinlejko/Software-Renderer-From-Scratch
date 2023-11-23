@@ -5,6 +5,7 @@
 #ifndef SRC_MODEL_H
 #define SRC_MODEL_H
 #include "datatypes.h"
+#include "tgaimage.h"
 #include <unordered_map>
 #include <vector>
 
@@ -15,10 +16,12 @@ public:
     int nverts() const;
     int nfaces() const;
     Point3D vert(int i);
-
+    void drawModel(TGAImage &image, const int width, const int height);
 private:
     std::unordered_map<int, Point3D> verts;
+    std::unordered_map<int, Point2D> projectedVerts;
     std::vector<std::vector<int>> faces;
     void parseModelFile(const char *filename);
+    void projectVerts(const int width, const int height);
 };
 #endif //SRC_MODEL_H

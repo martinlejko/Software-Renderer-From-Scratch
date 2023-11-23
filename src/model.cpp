@@ -3,6 +3,7 @@
 //
 #include "model.h"
 #include "datatypes.h"
+#include "graphics.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -51,4 +52,22 @@ void Model::parseModelFile(const char* filename){
             faces.push_back(face);
         }
     }
+}
+
+void Model::projectVerts(const int width, const int height) {
+    for (auto& vert : verts) {
+        Point3D point = vert.second;
+        projectedVerts[vert.first] = {int((point.x + 1.) * width / 2. + .5), int((point.y + 1.) * height / 2. + .5)};
+    }
+}
+
+void Model::drawModel(TGAImage &image, const int width, const int height) {
+    projectVerts(width, height);
+
+    for (auto& face : faces) {
+        Point2D p1 = projectedVerts[face[0]];
+        Point2D p2 = projectedVerts[face[1]];
+        Point2D p3 = projectedVerts[face[2]];
+    }
+
 }
