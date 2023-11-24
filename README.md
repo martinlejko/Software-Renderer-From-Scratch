@@ -17,7 +17,7 @@ I embarked on this project driven by the desire to:
 ## Features
 
 - **Custom Implementation:** Every aspect of the software renderer is handcrafted, enabling a full grasp of the rendering pipeline.
-- **TGA File Support:** Utilizes a pre-coded class for handling TGA (Truevision Graphics Adapter) files, one of the simplest image formats supporting RGB, RGBA, grayscale, and black-and-white formats.
+- **TGA File Support:** Utilizes TGA (Truevision Graphics Adapter) files, one of the simplest image formats supporting RGB, RGBA, grayscale, and black-and-white formats.
 - **No External Dependencies:** This renderer is designed to stand independently without relying on any third-party libraries or frameworks.
 - [TODO] include some demo showcase 
 
