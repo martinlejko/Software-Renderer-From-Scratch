@@ -12,17 +12,15 @@
 class Model {
 public:
     Model(const char *filename);
-    ~Model();
     int nverts() const;
     int nfaces() const;
-    Point3D vert(int i);
-    void drawModel(TGAImage &image, const int width, const int height);
+    void drawModel(TGAImage &image, int width, int height);
     void printVerticesAndFaces();
 private:
     std::unordered_map<int, Point3D> verts;
     std::unordered_map<int, Point2D> projectedVerts;
     std::unordered_map<int, std::vector<FaceElement>> faces;
     void parseModelFile(const char *filename);
-    void projectVerts(const int width, const int height);
+    void projectVerts(int width, int height);
 };
 #endif //SRC_MODEL_H

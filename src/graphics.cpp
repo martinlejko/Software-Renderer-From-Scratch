@@ -7,6 +7,7 @@
 
 
 void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAImage& image) {
+    //Bresenham's line algorithm
     int x = p1.x;
     int y = p1.y;
     int dx = abs(p2.x - p1.x);
@@ -22,7 +23,6 @@ void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAIm
         if (x == p2.x && y == p2.y) {
             break;
         }
-
         int e2 = 2 * err;
         if (e2 > -dy) {
             err -= dy;
