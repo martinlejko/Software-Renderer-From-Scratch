@@ -15,11 +15,6 @@ struct Point3D {
     float z;
 };
 
-
-
-
-
-
 struct FaceElement {
     int vertexIndex;
     int textureIndex;

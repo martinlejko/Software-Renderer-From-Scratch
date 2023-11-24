@@ -17,10 +17,11 @@ public:
     int nfaces() const;
     Point3D vert(int i);
     void drawModel(TGAImage &image, const int width, const int height);
+    void printVerticesAndFaces();
 private:
     std::unordered_map<int, Point3D> verts;
     std::unordered_map<int, Point2D> projectedVerts;
-    std::vector<std::vector<int>> faces;
+    std::unordered_map<int, std::vector<FaceElement>> faces;
     void parseModelFile(const char *filename);
     void projectVerts(const int width, const int height);
 };

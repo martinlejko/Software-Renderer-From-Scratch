@@ -33,7 +33,8 @@ void Model::parseModelFile(const char* filename){
     }
 
     std::string line;
-    int vertexIndex = 0;
+    int vertexIndex = 1;
+    int faceIndex = 1;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
         std::string type;
@@ -44,30 +45,71 @@ void Model::parseModelFile(const char* filename){
             verts[vertexIndex] = point;
             vertexIndex++;
         } else if (type == "f") {
-            std::vector<int> face;
-            int idx;
-            while (iss >> idx) {
-                face.push_back(idx);
+            std::vector<FaceElement> face;
+            FaceElement faceElement;
+            while (iss >> faceElement.vertexIndex) {
+                char separator;
+                if (iss.peek() == '/') {
+                    iss >> separator >> faceElement.textureIndex;
+                    if (iss.peek() == '/') {
+                        iss >> separator >> faceElement.normalIndex;
+                    } else {
+                        faceElement.normalIndex = 0; // Default value if not provided
+                    }
+                } else {
+                    faceElement.textureIndex = 0; // Default value if not provided
+                    faceElement.normalIndex = 0; // Default value if not provided
+                }
+                face.push_back(faceElement);
             }
-            faces.push_back(face);
+            faces[faceIndex] = face;
+            faceIndex++;
         }
     }
+
 }
 
 void Model::projectVerts(const int width, const int height) {
     for (auto& vert : verts) {
         Point3D point = vert.second;
-        projectedVerts[vert.first] = {int((point.x + 1.) * width / 2. + .5), int((point.y + 1.) * height / 2. + .5)};
+
+        // Simple 2D projection without considering Z-coordinate
+        int xProj = (point.x + 1.) * width / 2.;
+        int yProj = (point.y + 1.) * height / 2.;
+
+        projectedVerts[vert.first] = {xProj, yProj};
     }
 }
 
-void Model::drawModel(TGAImage &image, const int width, const int height) {
-    projectVerts(width, height);
 
-    for (auto& face : faces) {
-        Point2D p1 = projectedVerts[face[0]];
-        Point2D p2 = projectedVerts[face[1]];
-        Point2D p3 = projectedVerts[face[2]];
+
+void Model::drawModel(TGAImage &image, const int width, const int height) {
+    TGAColor white = TGAColor(255, 255, 255, 255);
+    projectVerts(width, height);
+    for (const auto& face : faces) {
+        Point2D p1 = projectedVerts[face.second[0].vertexIndex];
+        Point2D p2 = projectedVerts[face.second[1].vertexIndex];
+        Point2D p3 = projectedVerts[face.second[2].vertexIndex];
+//        std::cout<< "Drawing triangle with vertices: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << "), (" << p3.x << ", " << p3.y << ")" << std::endl;
+        drawLine(p1, p2, white, image);
+        drawLine(p2, p3, white, image);
+        drawLine(p3, p1, white, image);
     }
 
+}
+
+
+void Model::printVerticesAndFaces() {
+    std::cout << "Vertices:" << std::endl;
+    for (const auto& vertex : verts) {
+        std::cout << "Vertex Index: " << vertex.first << " | Coordinates: (" << vertex.second.x << ", " << vertex.second.y << ", " << vertex.second.z << ")" << std::endl;
+    }
+
+    std::cout << "\nFaces:" << std::endl;
+    for (const auto& face : faces) {
+        std::cout << "Face Index: " << face.first << std::endl;
+        for (const auto& faceElement : face.second) {
+            std::cout << "  Vertex Index: " << faceElement.vertexIndex << " | Texture Index: " << faceElement.textureIndex << " | Normal Index: " << faceElement.normalIndex << std::endl;
+        }
+    }
 }
