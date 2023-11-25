@@ -35,8 +35,28 @@ void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAIm
     }
 }
 
+//clockwide order
 void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const TGAColor& color, TGAImage& image) {
-    drawLine(p1, p2, color, image);
-    drawLine(p2, p3, color, image);
-    drawLine(p3, p1, color, image);
+    //find the bounding box of the triangle
+    int minX = std::min(p1.x, std::min(p2.x, p3.x));
+    int minY = std::min(p1.y, std::min(p2.y, p3.y));
+    int maxX = std::max(p1.x, std::max(p2.x, p3.x));
+    int maxY = std::max(p1.y, std::max(p2.y, p3.y));
+
+    //iterate over the bounding box and color the pixels inside the triangle
+    for (int y = minY; y <= maxY; y++) {
+        for (int x = minX; x <= maxX; x++) {
+            Point2D p(x, y);
+            //check if the pixel is inside the triangle
+            if (isInsideTriangle(p, p1, p2, p3)) {
+                image.set(x, y, color);
+            }
+        }
+    }
+}
+
+bool isInsideTriangle(){
+    //We use the cross product to declare if the point is inside the triangle, we use the clockwise order
+    //For the 2D the cross product will be the z component of the 3D cross product
+    
 }

@@ -11,4 +11,5 @@ add_executable(
         graphics.h
         graphics.cpp
         datatypes.h
-        model.h model.cpp)
+        model.h model.cpp
+        datatypes.cpp)
