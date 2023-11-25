@@ -10,7 +10,6 @@ int main(int argc, char** argv) {
     TGAImage image(width, height, TGAImage::RGB);
 
     Model africanHead("/Users/martinlejko/Desktop/github/Software-Renderer-From-Scratch/src/objects/african_head.obj");
-    //random commet for testing
     africanHead.drawModel(image, width, height);
 
     std::cout << "Number of vertices: " << africanHead.nverts() << std::endl;
