@@ -36,6 +36,14 @@ void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAIm
     }
 }
 
+bool isFlatOrLeftEdge(const Point2D& p1, const Point2D& p2) {
+    //check if the triangle has flat or left edge
+    Vector2D edge = Vector2D(p1, p2);
+    bool isFlatEdge = edge.y == 0 && edge.x > 0;
+    bool isLeftEdge = edge.y < 0;
+    return isFlatEdge || isLeftEdge;
+}
+
 void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const TGAColor& color, TGAImage& image) {
     //find the bounding box of the triangle
     int minX = std::min(p1.x, std::min(p2.x, p3.x));
