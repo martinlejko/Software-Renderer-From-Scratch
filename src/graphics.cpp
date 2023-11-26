@@ -4,6 +4,7 @@
 #include "tgaimage.h"
 #include "graphics.h"
 #include "datatypes.h"
+#include <algorithm>
 #include <iostream>
 
 
@@ -44,16 +45,36 @@ bool isFlatOrLeftEdge(const Point2D& p1, const Point2D& p2) {
     return isFlatEdge || isLeftEdge;
 }
 
-void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const TGAColor& color, TGAImage& image) {
-    std::vector<std::vector<int>> pointColors = {{255, 255, 255, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}};
+void sortPointsClockwise(Point2D p1, Point2D p2, Point2D p3) {
+    if (p1.y > p2.y) {
+        Point2D temp = p1;
+        p1 = p2;
+        p2 = temp;
+    }
+    if (p1.y > p3.y) {
+        Point2D temp = p1;
+        p1 = p3;
+        p3 = temp;
+    }
+    if (p2.y > p3.y) {
+        Point2D temp = p2;
+        p2 = p3;
+        p3 = temp;
+    }
+}
+
+
+void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, TGAImage& image) {
+    //sort the points in clockwise order
+    sortPointsClockwise(p1, p2, p3);
+    std::vector<std::vector<int>> pointColors = {{255, 0, 0, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}};
     //find the bounding box of the triangle
     int minX = std::min(p1.x, std::min(p2.x, p3.x));
     int minY = std::min(p1.y, std::min(p2.y, p3.y));
     int maxX = std::max(p1.x, std::max(p2.x, p3.x));
     int maxY = std::max(p1.y, std::max(p2.y, p3.y));
 
-    float area = Vector2D(p1, p2).crossProduct(Vector2D(p1, p3));
-
+    float area = static_cast<float>(Vector2D(p1, p2).crossProduct(Vector2D(p1, p3)));
 
     //once per triangle, calculate the bias for each edge of the triangle
     int bias1 = isFlatOrLeftEdge(p2, p3) ? 0 : -1;
@@ -79,12 +100,12 @@ void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const
             bool isInsideTriangle = (crossProductAB_p >= 0 && crossProductBC_p >= 0 && crossProductCA_p >= 0 );
             if (isInsideTriangle) {
                 //calculate the barycentric coordinates
-                float alpha = crossProductAB_p / area;
-                float beta = crossProductBC_p / area;
-                float gamma = crossProductCA_p / area;
-                int r = pointColors[0][0] * alpha + pointColors[1][0] * beta + pointColors[2][0] * gamma;
-                int g = pointColors[0][1] * alpha + pointColors[1][1] * beta + pointColors[2][1] * gamma;
-                int b = pointColors[0][2] * alpha + pointColors[1][2] * beta + pointColors[2][2] * gamma;
+                float alpha = static_cast<float>(crossProductAB_p) / area;
+                float beta = static_cast<float>(crossProductBC_p) / area;
+                float gamma = static_cast<float>(crossProductCA_p) / area;
+                int r = static_cast<int>(static_cast<float>(pointColors[0][0]) * alpha +  static_cast<float>(pointColors[1][0]) * beta +  static_cast<float>(pointColors[2][0]) * gamma);
+                int g =  static_cast<int>(static_cast<float>(pointColors[0][1]) * alpha +  static_cast<float>(pointColors[1][1]) * beta +  static_cast<float>(pointColors[2][1]) * gamma);
+                int b =  static_cast<int>(static_cast<float>(pointColors[0][2]) * alpha +  static_cast<float>(pointColors[1][2]) * beta + static_cast<float>(pointColors[2][2]) * gamma);
                 TGAColor color = TGAColor(r, g, b, 255);
                 image.set(x, y, color); }
         }

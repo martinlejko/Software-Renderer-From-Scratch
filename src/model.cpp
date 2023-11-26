@@ -99,6 +99,6 @@ void Model::drawModel(TGAImage &image, const int width, const int height) {
         Point2D p1 = projectedVerts[face.second[0].vertexIndex];
         Point2D p2 = projectedVerts[face.second[1].vertexIndex];
         Point2D p3 = projectedVerts[face.second[2].vertexIndex];
-        drawTriangle(p1, p2, p3, white, image);
+        drawTriangle(p1, p2, p3, image);
     }
 }
