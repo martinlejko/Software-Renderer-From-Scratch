@@ -9,11 +9,14 @@ int main(int argc, char** argv) {
     int height = 2500;
     TGAImage image(width, height, TGAImage::RGB);
 
-    Model africanHead("/Users/martinlejko/Desktop/github/Software-Renderer-From-Scratch/src/objects/african_head.obj");
-    africanHead.drawModel(image, width, height);
+//    Model africanHead("/Users/martinlejko/Desktop/github/Software-Renderer-From-Scratch/src/objects/african_head.obj");
+//    africanHead.drawModel(image, width, height);
+    Point2D p2 = {2000, 1500};
+    Point2D p1 = {1000, 500};
+    Point2D p3 = {300, 800};
+    TGAColor white = TGAColor(255, 255, 255, 255);
+    drawTriangle(p1,p2, p3, white, image);
 
-    std::cout << "Number of vertices: " << africanHead.nverts() << std::endl;
-    std::cout << "Number of faces: " << africanHead.nfaces() << std::endl;
     image.flip_vertically(); // I want to have the origin at the left bottom corner of the image
     image.write_tga_file("output.tga");
     return 0;

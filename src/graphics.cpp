@@ -3,6 +3,7 @@
 //
 #include "tgaimage.h"
 #include "graphics.h"
+#include "datatypes.h"
 #include <iostream>
 
 
@@ -35,7 +36,6 @@ void drawLine(const Point2D& p1, const Point2D& p2, const TGAColor& color, TGAIm
     }
 }
 
-//clockwide order
 void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const TGAColor& color, TGAImage& image) {
     //find the bounding box of the triangle
     int minX = std::min(p1.x, std::min(p2.x, p3.x));
@@ -46,17 +46,22 @@ void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const
     //iterate over the bounding box and color the pixels inside the triangle
     for (int y = minY; y <= maxY; y++) {
         for (int x = minX; x <= maxX; x++) {
-            Point2D p(x, y);
+            Point2D currentPixel{};
+            currentPixel.x = x;
+            currentPixel.y = y;
+            //calculate the cross product of the vectors
+            //clockwise order, with p1 at the top
+            Vector2D AB(p1, p2);
+            Vector2D BC(p2, p3);
+            Vector2D CA(p3, p1);
+            int crossProductAB_p = AB.crossProduct(Vector2D(p1, currentPixel));
+            int crossProductBC_p = BC.crossProduct(Vector2D(p2, currentPixel));
+            int crossProductCA_p = CA.crossProduct(Vector2D(p3, currentPixel));
+
             //check if the pixel is inside the triangle
-            if (isInsideTriangle(p, p1, p2, p3)) {
-                image.set(x, y, color);
-            }
+            bool isInsideTriangle = (crossProductAB_p >= 0 && crossProductBC_p >= 0 && crossProductCA_p >= 0 );
+            if (isInsideTriangle) { image.set(x, y, color); }
         }
     }
 }
 
-bool isInsideTriangle(){
-    //We use the cross product to declare if the point is inside the triangle, we use the clockwise order
-    //For the 2D the cross product will be the z component of the 3D cross product
-    
-}

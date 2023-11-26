@@ -6,7 +6,7 @@
 #define SRC_DATATYPES_H
 struct Point2D {
     int x;
-    int y;
+    
 };
 
 struct Point3D {
