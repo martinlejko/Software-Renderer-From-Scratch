@@ -1,7 +1,6 @@
 //
 // Created by Martin Lejko on 22/11/2023.
 //
-
 #ifndef SRC_GRAPHICS_H
 #define SRC_GRAPHICS_H
 #include "tgaimage.h"
