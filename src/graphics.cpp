@@ -64,10 +64,10 @@ void sortPointsClockwise(Point2D p1, Point2D p2, Point2D p3) {
 }
 
 
-void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, TGAImage& image) {
+void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, TGAImage& image, const TGAColor& color) {
     //sort the points in clockwise order
     sortPointsClockwise(p1, p2, p3);
-    std::vector<std::vector<float>> pointColors = {{255, 0, 0, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}};
+//    std::vector<std::vector<float>> pointColors = {{255, 0, 0, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}}; //rand() % 255
 
     //find the bounding box of the triangle
     int minX = std::min(p1.x, std::min(p2.x, p3.x));
@@ -117,10 +117,10 @@ void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, TGAIm
                 float beta = static_cast<float>(crossProductBC_p) / area;
                 float gamma = static_cast<float>(crossProductCA_p) / area;
 
-                int r = static_cast<int>(pointColors[0][0] * alpha + pointColors[1][0] * beta + pointColors[2][0] * gamma);
-                int g =  static_cast<int>(pointColors[0][1] * alpha +  pointColors[1][1] * beta +  pointColors[2][1] * gamma);
-                int b =  static_cast<int>(pointColors[0][2] * alpha +  pointColors[1][2] * beta + pointColors[2][2] * gamma);
-                TGAColor color = TGAColor(r, g, b, 255);
+//                int r = static_cast<int>(pointColors[0][0] * alpha + pointColors[1][0] * beta + pointColors[2][0] * gamma);
+//                int g = static_cast<int>(pointColors[0][1] * alpha +  pointColors[1][1] * beta +  pointColors[2][1] * gamma);
+//                int b = static_cast<int>(pointColors[0][2] * alpha +  pointColors[1][2] * beta + pointColors[2][2] * gamma);
+
                 image.set(x, y, color);
             }
             crossProductAB_p += deltaColAB;

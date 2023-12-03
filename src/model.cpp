@@ -93,12 +93,28 @@ void Model::projectVerts(const int width, const int height) {
 }
 
 void Model::drawModel(TGAImage &image, const int width, const int height) {
+    Vector3D lightDirection = {0, 0, -1};
     TGAColor white = TGAColor(255, 255, 255, 255);
     projectVerts(width, height);
     for (const auto& face : faces) {
         Point2D p1 = projectedVerts[face.second[0].vertexIndex];
         Point2D p2 = projectedVerts[face.second[1].vertexIndex];
         Point2D p3 = projectedVerts[face.second[2].vertexIndex];
-        drawTriangle(p1, p2, p3, image);
+        Vector2D edge1 = Vector2D(p1, p2);
+        Vector2D edge2 = Vector2D(p1, p3);
+        Vector3D edge1_3D = Vector3D(edge1.x, edge1.y, 0);
+        Vector3D edge2_3D = Vector3D(edge2.x, edge2.y, 0);
+        Vector3D normal = edge1_3D.crossProduct(edge2_3D);
+        double normalMagnitude = sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        normal.x /= normalMagnitude;
+        normal.y /= normalMagnitude;
+        normal.z /= normalMagnitude;
+        double intensity = normal.dotProduct(lightDirection);
+        std::cout << "Intensity: " << intensity << std::endl;
+        TGAColor color =  TGAColor(255* intensity, 255* intensity, 255* intensity, 255);
+        drawTriangle(p1, p2, p3, image, color);
+
+
+
     }
 }
