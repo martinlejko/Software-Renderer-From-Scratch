@@ -35,6 +35,9 @@ struct Vector3D {
 
     Vector3D crossProduct(const Vector3D& v) const;
     double dotProduct(const Vector3D& v) const ;
+
+    float magnitude();
+    void normalize();
 };
 
 

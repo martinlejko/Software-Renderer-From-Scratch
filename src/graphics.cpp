@@ -120,7 +120,7 @@ void drawTriangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, TGAIm
 //                int r = static_cast<int>(pointColors[0][0] * alpha + pointColors[1][0] * beta + pointColors[2][0] * gamma);
 //                int g = static_cast<int>(pointColors[0][1] * alpha +  pointColors[1][1] * beta +  pointColors[2][1] * gamma);
 //                int b = static_cast<int>(pointColors[0][2] * alpha +  pointColors[1][2] * beta + pointColors[2][2] * gamma);
-
+//                TGAColor color = TGAColor(r, g, b, 255);
                 image.set(x, y, color);
             }
             crossProductAB_p += deltaColAB;

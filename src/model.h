@@ -15,6 +15,7 @@ public:
     int nverts() const;
     int nfaces() const;
     void drawModel(TGAImage &image, int width, int height);
+    void drawModelWithLight(TGAImage &image, int width, int height, Vector3D lightDirection);
     void printVerticesAndFaces();
 private:
     std::unordered_map<int, Point3D> verts;
