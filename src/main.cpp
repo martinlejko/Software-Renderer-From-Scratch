@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
     TGAImage image(width, height, TGAImage::RGB);
 
     Model africanHead("/Users/martinlejko/Desktop/github/Software-Renderer-From-Scratch/src/objects/african_head.obj");
-    africanHead.drawModelWithLight(image, width, height, Vector3D(0, 0,  1));
+    africanHead.drawModelWithLight(image, width, height, Vector3D(0, 0, -1));
 
     image.flip_vertically(); // I want to have the origin at the left bottom corner of the image
     image.write_tga_file("output.tga");

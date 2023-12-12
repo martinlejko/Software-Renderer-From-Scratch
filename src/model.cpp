@@ -116,11 +116,10 @@ void Model::drawModelWithLight(TGAImage &image, int width, int height, Vector3D 
         Point3D v1 = verts[face.second[1].vertexIndex];
         Point3D v2 = verts[face.second[2].vertexIndex];
 
-        Vector3D edge1 = Vector3D(v0, v1);
-        Vector3D edge2 = Vector3D(v0, v2);
-        Vector3D normal = edge1.crossProduct(edge2);
+        Vector3D edge1 = Vector3D(v2, v0);
+        Vector3D edge2 = Vector3D(v2, v1);
+        Vector3D normal = edge2.crossProduct(edge1);
         normal.normalize();
-        
         float intensity = normal.dotProduct(lightDirection);
 
         if (intensity > 0) {
