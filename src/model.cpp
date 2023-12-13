@@ -76,9 +76,16 @@ void Model::parseModelFile(const char* filename){
             }
             faces[faceIndex] = face;
             faceIndex++;
+        } else if (type == "vt") {
+            continue;
         }
     }
 
+}
+
+void Model::loadTexture(TGAImage &image) {
+    image.read_tga_file("/Users/martinlejko/Desktop/github/Software-Renderer-From-Scratch/src/objects/african_head_diffuse.tga");
+    image.flip_vertically();
 }
 
 void Model::projectVerts(const int width, const int height) {
@@ -99,19 +106,19 @@ void Model::drawModel(TGAImage &image, const int width, const int height) {
         Point2D p1 = projectedVerts[face.second[0].vertexIndex];
         Point2D p2 = projectedVerts[face.second[1].vertexIndex];
         Point2D p3 = projectedVerts[face.second[2].vertexIndex];
-        drawTriangle(p1, p2, p3, image, white);
+//        drawTriangle(p1, p2, p3, image, white);
     }
 }
 
 
-void Model::drawModelWithLight(TGAImage &image, int width, int height, Vector3D lightDirection) {
+void Model::drawModelWithLight(TGAImage &image,TGAImage &texture, int width, int height, Vector3D lightDirection) {
     projectVerts(width, height);
+
     for (const auto& face : faces) {
         Point2D p1 = projectedVerts[face.second[0].vertexIndex];
         Point2D p2 = projectedVerts[face.second[1].vertexIndex];
         Point2D p3 = projectedVerts[face.second[2].vertexIndex];
-
-        // Calculate the normal vector of the face
+        //Calculate the normal vector of the face
         Point3D v0 = verts[face.second[0].vertexIndex];
         Point3D v1 = verts[face.second[1].vertexIndex];
         Point3D v2 = verts[face.second[2].vertexIndex];
@@ -123,9 +130,25 @@ void Model::drawModelWithLight(TGAImage &image, int width, int height, Vector3D 
         float intensity = normal.dotProduct(lightDirection);
 
         if (intensity > 0) {
-            // Clamp intensity between 0 and 1
-            drawTriangle(p1, p2, p3, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+            //texture points for the face and edited to be within the range of the texture image
+            int imgHeight = texture.get_height();
+            int imgWidth = texture.get_width();
+//            std::cout << imgHeight << " " << imgWidth << std::endl;
+            Point2D t1 = projectedVerts[face.second[0].textureIndex];
+            Point2D t2 = projectedVerts[face.second[1].textureIndex];
+            Point2D t3 = projectedVerts[face.second[2].textureIndex];
 
+            t1.x = t1.x * imgWidth;
+            t1.y = t1.y * imgHeight;
+            t2.x = t2.x * imgWidth;
+            t2.y = t2.y * imgHeight;
+            t3.x = t3.x * imgWidth;
+
+            TGAColor colorP1 = texture.get(static_cast<int>(t1.x), static_cast<int>(t1.y));
+            TGAColor colorP2 = texture.get(static_cast<int>(t2.x), static_cast<int>(t2.y));
+            TGAColor colorP3 = texture.get(static_cast<int>(t3.x), static_cast<int>(t3.y));
+            std::vector<TGAColor> colors = {colorP1, colorP2, colorP3};
+            drawTriangle(p1, p2, p3, image, colors, intensity);
         }
     }
 }
